@@ -12,7 +12,16 @@ MODULE_ID = "orders"
 MODULE_NAME = _("Orders")
 MODULE_ICON = "receipt-outline"
 MODULE_VERSION = "1.0.0"
-MODULE_CATEGORY = "restaurant"
+MODULE_CATEGORY = "horeca"  # Changed from "restaurant" to valid category
+
+# Target Industries (business verticals this module is designed for)
+MODULE_INDUSTRIES = [
+    "restaurant", # Restaurants
+    "bar",        # Bars & pubs
+    "cafe",       # Cafes & bakeries
+    "fast_food",  # Fast food
+    "catering",   # Catering & events
+]
 
 # Sidebar Menu Configuration
 MENU = {
