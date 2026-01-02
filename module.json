@@ -1,0 +1,27 @@
+{
+  "module_id": "orders",
+  "name": "Orders & Kitchen Display",
+  "name_es": "Comandas y Pantalla de Cocina",
+  "version": "1.0.0",
+  "description": "Order management system with kitchen display, ticket routing and preparation tracking",
+  "description_es": "Sistema de comandas con pantalla de cocina, enrutamiento de tickets y seguimiento de preparacion",
+  "author": "ERPlora",
+  "category": "hospitality",
+  "icon": "receipt-outline",
+  "color": "#F97316",
+  "price": 0,
+  "is_free": true,
+  "requires": ["inventory", "tables"],
+  "menu": {
+    "label": "Orders",
+    "label_es": "Comandas",
+    "icon": "receipt-outline",
+    "url": "/modules/orders/",
+    "order": 23,
+    "show": true
+  },
+  "dependencies": {
+    "inventory": ">=1.0.0",
+    "tables": ">=1.0.0"
+  }
+}

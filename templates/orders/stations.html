@@ -1,0 +1,30 @@
+{% extends "orders/base.html" %}
+
+{% block page_content %}
+<ion-list>
+    {% for station in stations %}
+    <ion-item href="/modules/orders/stations/{{ station.id }}/edit/" detail>
+        <ion-icon name="{{ station.icon }}" slot="start" style="color: {{ station.color }}"></ion-icon>
+        <ion-label>
+            <h2>{{ station.name }}</h2>
+            <p>{{ station.pending_count }} pending items</p>
+        </ion-label>
+        {% if not station.is_active %}
+        <ion-badge color="medium" slot="end">Inactive</ion-badge>
+        {% endif %}
+    </ion-item>
+    {% empty %}
+    <ion-item>
+        <ion-label class="ion-text-center">
+            <p>No kitchen stations configured</p>
+        </ion-label>
+    </ion-item>
+    {% endfor %}
+</ion-list>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button href="/modules/orders/stations/new/">
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+</ion-fab>
+{% endblock %}

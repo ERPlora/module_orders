@@ -1,0 +1,39 @@
+{% extends "orders/base.html" %}
+
+{% block page_content %}
+<ion-list-header>
+    <ion-label>Product Routing</ion-label>
+</ion-list-header>
+<ion-list>
+    {% for mapping in product_mappings %}
+    <ion-item>
+        <ion-label>
+            <h2>Product #{{ mapping.product_id }}</h2>
+            <p>-> {{ mapping.station.name }}</p>
+        </ion-label>
+    </ion-item>
+    {% empty %}
+    <ion-item>
+        <ion-label><p>No product routings configured</p></ion-label>
+    </ion-item>
+    {% endfor %}
+</ion-list>
+
+<ion-list-header>
+    <ion-label>Category Routing</ion-label>
+</ion-list-header>
+<ion-list>
+    {% for mapping in category_mappings %}
+    <ion-item>
+        <ion-label>
+            <h2>Category #{{ mapping.category_id }}</h2>
+            <p>-> {{ mapping.station.name }}</p>
+        </ion-label>
+    </ion-item>
+    {% empty %}
+    <ion-item>
+        <ion-label><p>No category routings configured</p></ion-label>
+    </ion-item>
+    {% endfor %}
+</ion-list>
+{% endblock %}
