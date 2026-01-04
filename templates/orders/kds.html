@@ -6,7 +6,7 @@
         {% for station in stations %}
         <a href="/modules/orders/kds/{{ station.id }}/"
            class="station-tab {% if current_station and current_station.id == station.id %}active{% endif %}">
-            <ion-icon name="{{ station.icon }}"></ion-icon>
+            {% icon "{{ station.icon }}" %}
             {{ station.name }}
             {% if station.pending_count > 0 %}
             <span class="badge">{{ station.pending_count }}</span>
