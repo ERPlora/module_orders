@@ -27,7 +27,7 @@ NAVIGATION = [
     {"id": "settings", "label": _("Settings"), "icon": "settings-outline", "view": "settings"},
 ]
 
-DEPENDENCIES = []
+DEPENDENCIES = ['tables', 'sales', 'customers', 'inventory']
 
 SETTINGS = {
     "auto_accept_orders": True,

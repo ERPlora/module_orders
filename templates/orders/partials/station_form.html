@@ -1,0 +1,106 @@
+{% load i18n djicons %}
+
+<div class="p-4">
+    <button type="button"
+            hx-get="{% url 'orders:stations' %}"
+            hx-target="#main-content-area"
+            hx-push-url="true"
+            class="btn btn-ghost mb-3">
+        {% icon "arrow-back-outline" %}
+        {% trans "Back to Stations" %}
+    </button>
+
+    <form method="post"
+          hx-post=""
+          hx-target="#main-content-area">
+        {% csrf_token %}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% if is_new %}{% trans "New Station" %}{% else %}{% trans "Edit Station" %} — {{ station.name }}{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Name" %}</label>
+                        {{ form.name }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Icon" %}</label>
+                        {{ form.icon }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Color" %}</label>
+                        {{ form.color }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Printer Name" %}</label>
+                        {{ form.printer_name }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Sort Order" %}</label>
+                        {{ form.sort_order }}
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="toggle">
+                            {{ form.is_active }}
+                            
+                        </label>
+                        <span>{% trans "Active" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if form.errors %}
+        <div class="card mb-4" style="border-color: var(--color-error)">
+            <div class="card-body">
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <p class="text-error text-sm">{{ field }}: {{ error }}</p>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-lg btn-block color-primary">
+            {% if is_new %}
+            {% icon "add-outline" %} {% trans "Create Station" %}
+            {% else %}
+            {% icon "checkmark-outline" %} {% trans "Save Changes" %}
+            {% endif %}
+        </button>
+    </form>
+
+    {% if not is_new %}
+    <!-- Danger Zone -->
+    <div class="card mt-6" style="border-color: var(--color-error)">
+        <div class="card-header">
+            <h3 class="card-title text-error">{% trans "Danger Zone" %}</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-3">{% trans "Permanently delete this station. Items routed here will need to be reassigned." %}</p>
+            <button type="button" class="btn btn-outline color-error"
+                    onclick="deleteStation()">
+                {% icon "trash-outline" %} {% trans "Delete Station" %}
+            </button>
+        </div>
+    </div>
+
+    <script>
+    function deleteStation() {
+        if (confirm('{% trans "Delete this station?" %}')) {
+            fetch('{% url "orders:station_delete" station.id %}', {
+                method: 'POST',
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    htmx.ajax('GET', '{% url "orders:stations" %}', '#main-content-area');
+                }
+            });
+        }
+    }
+    </script>
+    {% endif %}
+</div>

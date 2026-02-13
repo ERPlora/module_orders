@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    OrdersConfig,
+    OrdersSettings,
     KitchenStation,
     Order,
     OrderItem,
@@ -9,14 +9,14 @@ from .models import (
 )
 
 
-@admin.register(OrdersConfig)
-class OrdersConfigAdmin(admin.ModelAdmin):
+@admin.register(OrdersSettings)
+class OrdersSettingsAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'use_rounds', 'auto_print_tickets', 'alert_threshold_minutes']
 
 
 @admin.register(KitchenStation)
 class KitchenStationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'color', 'printer_name', 'is_active', 'order']
+    list_display = ['name', 'color', 'printer_name', 'is_active']
     list_filter = ['is_active']
     search_fields = ['name']
 

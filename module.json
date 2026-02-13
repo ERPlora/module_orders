@@ -1,27 +1,30 @@
 {
-  "module_id": "orders",
-  "name": "Orders & Kitchen Display",
-  "name_es": "Comandas y Pantalla de Cocina",
-  "version": "1.0.0",
-  "description": "Order management system with kitchen display, ticket routing and preparation tracking",
-  "description_es": "Sistema de comandas con pantalla de cocina, enrutamiento de tickets y seguimiento de preparacion",
-  "author": "ERPlora",
-  "category": "hospitality",
-  "icon": "receipt-outline",
-  "color": "#F97316",
-  "price": 0,
-  "is_free": true,
-  "requires": ["inventory", "tables"],
-  "menu": {
-    "label": "Orders",
-    "label_es": "Comandas",
-    "icon": "receipt-outline",
-    "url": "/modules/orders/",
-    "order": 23,
-    "show": true
-  },
-  "dependencies": {
-    "inventory": ">=1.0.0",
-    "tables": ">=1.0.0"
-  }
+    "id": "orders",
+    "name": "Orders",
+    "version": "2.0.0",
+    "description": "Order management with kitchen display, station routing and preparation tracking",
+    "author": "ERPlora",
+    "category": "hospitality",
+    "icon": "receipt",
+    "color": "warning",
+    "requires": ["inventory", "tables"],
+    "menu": {
+        "label": "Orders",
+        "icon": "receipt-outline",
+        "order": 23
+    },
+    "navigation": [
+        {"id": "active_orders", "label": "Active Orders", "icon": "list-outline"},
+        {"id": "kds", "label": "Kitchen Display", "icon": "restaurant-outline"},
+        {"id": "stations", "label": "Stations", "icon": "flame-outline"},
+        {"id": "routing", "label": "Routing", "icon": "git-branch-outline"},
+        {"id": "history", "label": "History", "icon": "time-outline"},
+        {"id": "settings", "label": "Settings", "icon": "settings-outline"}
+    ],
+    "permissions": [
+        "orders.view_order", "orders.add_order", "orders.change_order", "orders.delete_order",
+        "orders.view_orderitem", "orders.add_orderitem", "orders.change_orderitem", "orders.delete_orderitem",
+        "orders.view_kitchenstation", "orders.add_kitchenstation", "orders.change_kitchenstation", "orders.delete_kitchenstation",
+        "orders.view_orderssettings", "orders.change_orderssettings"
+    ]
 }

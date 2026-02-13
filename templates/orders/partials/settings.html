@@ -1,0 +1,213 @@
+{% load i18n djicons %}
+
+<div class="p-4">
+    <!-- Overview Stats -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="card">
+            <div class="card-body flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    {% icon "receipt-outline" css_class="text-xl text-primary" %}
+                </div>
+                <div>
+                    <div class="text-2xl font-bold">{{ today_orders_count }}</div>
+                    <div class="text-xs text-muted">{% trans "Today's Orders" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
+                    {% icon "cash-outline" css_class="text-xl text-success" %}
+                </div>
+                <div>
+                    <div class="text-2xl font-bold">{{ today_revenue }}</div>
+                    <div class="text-xs text-muted">{% trans "Today's Revenue" %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kitchen Display Settings -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title">{% icon "restaurant-outline" css_class="text-primary" %} {% trans "Kitchen Display" %}</h3>
+        </div>
+        <div class="list">
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Auto Print Tickets" %}</div>
+                    <div class="list-item-note">{% trans "Print kitchen tickets automatically when orders fire" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <label class="toggle">
+                        <input type="checkbox" name="auto_print_tickets"
+                               {% if config.auto_print_tickets %}checked{% endif %}
+                               hx-post="{% url 'orders:settings_toggle' %}"
+                               hx-vals='js:{name: "auto_print_tickets", value: event.target.checked ? "true" : "false"}'
+                               hx-swap="none">
+                        
+                    </label>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Show Prep Time" %}</div>
+                    <div class="list-item-note">{% trans "Display elapsed preparation time on orders" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <label class="toggle">
+                        <input type="checkbox" name="show_prep_time"
+                               {% if config.show_prep_time %}checked{% endif %}
+                               hx-post="{% url 'orders:settings_toggle' %}"
+                               hx-vals='js:{name: "show_prep_time", value: event.target.checked ? "true" : "false"}'
+                               hx-swap="none">
+                        
+                    </label>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Alert Threshold" %}</div>
+                    <div class="list-item-note">{% trans "Minutes before flagging an order as delayed" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <input type="number" name="alert_threshold_minutes"
+                           value="{{ config.alert_threshold_minutes }}"
+                           class="input input--sm"
+                           style="width: 80px;"
+                           hx-post="{% url 'orders:settings_input' %}"
+                           hx-vals='js:{name: "alert_threshold_minutes", value: event.target.value}'
+                           hx-trigger="change"
+                           hx-swap="none"
+                           min="1" max="120">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Behavior -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title">{% icon "settings-outline" css_class="text-warning" %} {% trans "Order Behavior" %}</h3>
+        </div>
+        <div class="list">
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Use Rounds/Courses" %}</div>
+                    <div class="list-item-note">{% trans "Group order items by course number" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <label class="toggle">
+                        <input type="checkbox" name="use_rounds"
+                               {% if config.use_rounds %}checked{% endif %}
+                               hx-post="{% url 'orders:settings_toggle' %}"
+                               hx-vals='js:{name: "use_rounds", value: event.target.checked ? "true" : "false"}'
+                               hx-swap="none">
+                        
+                    </label>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Auto-fire on Round" %}</div>
+                    <div class="list-item-note">{% trans "Automatically fire items when round is complete" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <label class="toggle">
+                        <input type="checkbox" name="auto_fire_on_round"
+                               {% if config.auto_fire_on_round %}checked{% endif %}
+                               hx-post="{% url 'orders:settings_toggle' %}"
+                               hx-vals='js:{name: "auto_fire_on_round", value: event.target.checked ? "true" : "false"}'
+                               hx-swap="none">
+                        
+                    </label>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Sound on New Order" %}</div>
+                    <div class="list-item-note">{% trans "Play notification sound when a new order arrives" %}</div>
+                </div>
+                <div class="list-item-end">
+                    <label class="toggle">
+                        <input type="checkbox" name="sound_on_new_order"
+                               {% if config.sound_on_new_order %}checked{% endif %}
+                               hx-post="{% url 'orders:settings_toggle' %}"
+                               hx-vals='js:{name: "sound_on_new_order", value: event.target.checked ? "true" : "false"}'
+                               hx-swap="none">
+                        
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title">{% icon "link-outline" %} {% trans "Quick Actions" %}</h3>
+        </div>
+        <div class="list">
+            <a hx-get="{% url 'orders:stations' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true"
+               class="list-item list-item-clickable">
+                <div class="list-item-start">{% icon "grid-outline" css_class="text-primary" %}</div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Kitchen Stations" %}</div>
+                    <div class="list-item-note">{{ stations|length }} {% trans "stations configured" %}</div>
+                </div>
+                <div class="list-item-end">{% icon "chevron-forward-outline" css_class="text-muted" %}</div>
+            </a>
+            <a hx-get="{% url 'orders:routing' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true"
+               class="list-item list-item-clickable">
+                <div class="list-item-start">{% icon "git-branch-outline" css_class="text-warning" %}</div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Order Routing" %}</div>
+                    <div class="list-item-note">{% trans "Route products to stations" %}</div>
+                </div>
+                <div class="list-item-end">{% icon "chevron-forward-outline" css_class="text-muted" %}</div>
+            </a>
+            <a hx-get="{% url 'orders:kds' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true"
+               class="list-item list-item-clickable">
+                <div class="list-item-start">{% icon "desktop-outline" css_class="text-success" %}</div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{% trans "Kitchen Display" %}</div>
+                    <div class="list-item-note">{% trans "Open kitchen display system" %}</div>
+                </div>
+                <div class="list-item-end">{% icon "chevron-forward-outline" css_class="text-muted" %}</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Reset -->
+    <div class="card" style="border-color: var(--color-warning)">
+        <div class="card-header">
+            <h3 class="card-title text-warning">{% trans "Reset Settings" %}</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-3">{% trans "Restore all order settings to their default values." %}</p>
+            <button type="button" class="btn color-warning btn-outline"
+                    onclick="resetSettings()">
+                {% icon "refresh-outline" %} {% trans "Reset to Defaults" %}
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function resetSettings() {
+    if (confirm('{% trans "Reset all settings to defaults?" %}')) {
+        fetch('{% url "orders:settings_reset" %}', {
+            method: 'POST',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        }).then(r => {
+            if (r.ok) htmx.ajax('GET', '{% url "orders:settings" %}', '#main-content-area');
+        });
+    }
+}
+</script>

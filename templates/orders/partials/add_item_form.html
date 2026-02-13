@@ -1,0 +1,75 @@
+{% load i18n djicons %}
+
+<div class="p-4">
+    <button type="button"
+            hx-get="{% url 'orders:detail' order.id %}"
+            hx-target="#main-content-area"
+            hx-push-url="true"
+            class="btn btn-ghost mb-3">
+        {% icon "arrow-back-outline" %}
+        {% trans "Back to Order" %} #{{ order.order_number }}
+    </button>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{% trans "Add Item to Order" %} #{{ order.order_number }}</h3>
+            <p class="text-sm opacity-60">
+                {% if order.table %}{% trans "Table" %} {{ order.table_display }}{% endif %}
+            </p>
+        </div>
+        <div class="card-body">
+            <form method="post"
+                  hx-post="{% url 'orders:add_item' order.id %}"
+                  hx-target="#main-content-area">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Product" %}</label>
+                        {{ form.product }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Product Name" %}</label>
+                        {{ form.product_name }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Quantity" %}</label>
+                        {{ form.quantity }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Unit Price" %}</label>
+                        {{ form.unit_price }}
+                    </div>
+                    <div>
+                        <label class="form-group-label mb-1">{% trans "Seat Number" %}</label>
+                        {{ form.seat_number }}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-group-label mb-1">{% trans "Modifiers" %}</label>
+                    {{ form.modifiers }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-group-label mb-1">{% trans "Notes" %}</label>
+                    {{ form.notes }}
+                </div>
+
+                {% if form.errors %}
+                <div class="mb-4">
+                    {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <p class="text-error text-sm">{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-lg btn-block color-primary">
+                    {% icon "add-outline" %} {% trans "Add Item" %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

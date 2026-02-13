@@ -1,6 +1,4 @@
-"""
-Orders Module URLs
-"""
+"""Orders Module URL Configuration"""
 
 from django.urls import path
 from . import views
@@ -8,53 +6,68 @@ from . import views
 app_name = 'orders'
 
 urlpatterns = [
-    # Page views
+    # Main
     path('', views.index, name='index'),
+    path('active/', views.active_orders, name='active_orders'),
+
+    # Order CRUD
+    path('create/', views.order_create, name='create'),
+    path('<uuid:order_id>/', views.order_detail, name='detail'),
+    path('<uuid:order_id>/edit/', views.order_edit, name='edit'),
+    path('<uuid:order_id>/delete/', views.order_delete, name='delete'),
+
+    # Order items
+    path('<uuid:order_id>/add-item/', views.add_item, name='add_item'),
+    path('<uuid:order_id>/items/<uuid:item_id>/update/', views.update_item_quantity, name='update_item_quantity'),
+    path('<uuid:order_id>/items/<uuid:item_id>/remove/', views.remove_item, name='remove_item'),
+    path('<uuid:order_id>/items/<uuid:item_id>/ready/', views.mark_item_ready, name='mark_item_ready'),
+
+    # Order workflow
+    path('<uuid:order_id>/fire/', views.fire_order, name='fire'),
+    path('<uuid:order_id>/bump/', views.bump_order, name='bump'),
+    path('<uuid:order_id>/recall/', views.recall_order, name='recall'),
+    path('<uuid:order_id>/serve/', views.serve_order, name='serve'),
+    path('<uuid:order_id>/cancel/', views.cancel_order, name='cancel'),
+    path('<uuid:order_id>/update-status/', views.update_status, name='update_status'),
+
+    # Kitchen Display System
     path('kds/', views.kitchen_display, name='kds'),
-    path('kds/<int:station_id>/', views.kitchen_display, name='kds_station'),
+    path('kds/<uuid:station_id>/', views.kitchen_display, name='kds_station'),
+
+    # Kitchen Stations
     path('stations/', views.stations_list, name='stations'),
-    path('stations/new/', views.station_create, name='station_create'),
-    path('stations/<int:station_id>/edit/', views.station_edit, name='station_edit'),
+    path('stations/add/', views.station_add, name='station_add'),
+    path('stations/<uuid:station_id>/edit/', views.station_edit, name='station_edit'),
+    path('stations/<uuid:station_id>/delete/', views.station_delete, name='station_delete'),
+
+    # Routing
     path('routing/', views.routing, name='routing'),
-    path('settings/', views.orders_settings, name='settings'),
+    path('routing/product/assign/', views.assign_product_station, name='assign_product_station'),
+    path('routing/category/assign/', views.assign_category_station, name='assign_category_station'),
+    path('routing/product/<uuid:product_id>/remove/', views.remove_product_routing, name='remove_product_routing'),
+    path('routing/category/<uuid:category_id>/remove/', views.remove_category_routing, name='remove_category_routing'),
 
-    # Order pages
-    path('orders/new/', views.order_create, name='order_create'),
-    path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    # History
+    path('history/', views.history, name='history'),
 
-    # Order API
+    # API (JSON)
     path('api/orders/create/', views.api_create_order, name='api_create_order'),
-    path('api/orders/<int:order_id>/', views.api_get_order, name='api_get_order'),
-    path('api/orders/<int:order_id>/add-item/', views.api_add_item, name='api_add_item'),
-    path('api/orders/<int:order_id>/fire/', views.api_fire_order, name='api_fire_order'),
-    path('api/orders/<int:order_id>/bump/', views.api_bump_order, name='api_bump_order'),
-    path('api/orders/<int:order_id>/recall/', views.api_recall_order, name='api_recall_order'),
-    path('api/orders/<int:order_id>/serve/', views.api_serve_order, name='api_serve_order'),
-    path('api/orders/<int:order_id>/cancel/', views.api_cancel_order, name='api_cancel_order'),
+    path('api/orders/<uuid:order_id>/', views.api_get_order, name='api_get_order'),
     path('api/orders/pending/', views.api_pending_orders, name='api_pending_orders'),
-    path('api/orders/table/<int:table_id>/', views.api_orders_by_table, name='api_orders_by_table'),
+    path('api/orders/table/<uuid:table_id>/', views.api_orders_by_table, name='api_orders_by_table'),
     path('api/orders/stats/', views.api_order_stats, name='api_order_stats'),
 
     # Item API
-    path('api/items/<int:item_id>/bump/', views.api_bump_item, name='api_bump_item'),
-    path('api/items/<int:item_id>/cancel/', views.api_cancel_item, name='api_cancel_item'),
-    path('api/items/<int:item_id>/quantity/', views.api_modify_item_quantity, name='api_modify_quantity'),
+    path('api/items/<uuid:item_id>/bump/', views.bump_item, name='api_bump_item'),
+    path('api/items/<uuid:item_id>/cancel/', views.cancel_item, name='api_cancel_item'),
+    path('api/items/<uuid:item_id>/quantity/', views.modify_item_quantity, name='api_modify_quantity'),
 
     # Station API
-    path('api/stations/', views.api_list_stations, name='api_list_stations'),
-    path('api/stations/create/', views.api_create_station, name='api_create_station'),
-    path('api/stations/<int:station_id>/update/', views.api_update_station, name='api_update_station'),
-    path('api/stations/<int:station_id>/delete/', views.api_delete_station, name='api_delete_station'),
-    path('api/stations/<int:station_id>/items/', views.api_station_items, name='api_station_items'),
     path('api/stations/summary/', views.api_station_summary, name='api_station_summary'),
+    path('api/stations/<uuid:station_id>/items/', views.api_station_items, name='api_station_items'),
 
-    # Routing API
-    path('api/routing/product/', views.api_assign_product_station, name='api_assign_product'),
-    path('api/routing/category/', views.api_assign_category_station, name='api_assign_category'),
-    path('api/routing/product/<int:product_id>/remove/', views.api_remove_product_routing, name='api_remove_product_routing'),
-    path('api/routing/category/<int:category_id>/remove/', views.api_remove_category_routing, name='api_remove_category_routing'),
-
-    # Settings API
+    # Settings
+    path('settings/', views.settings, name='settings'),
     path('settings/save/', views.settings_save, name='settings_save'),
     path('settings/toggle/', views.settings_toggle, name='settings_toggle'),
     path('settings/input/', views.settings_input, name='settings_input'),

@@ -1,0 +1,56 @@
+{% load i18n djicons %}
+
+<div class="p-4">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">{% trans "Kitchen Stations" %}</h3>
+        <a hx-get="{% url 'orders:station_add' %}"
+           hx-target="#main-content-area"
+           hx-push-url="true"
+           class="btn btn-sm color-primary">
+            {% icon "add-outline" %} {% trans "Add Station" %}
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="list">
+            {% for station in stations %}
+            <a hx-get="{% url 'orders:station_edit' station.id %}"
+               hx-target="#main-content-area"
+               hx-push-url="true"
+               class="list-item list-item-clickable">
+                <div class="list-item-start">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                         style="background: {{ station.color }}20; color: {{ station.color }}">
+                        {% icon station.icon css_class="text-xl" %}
+                    </div>
+                </div>
+                <div class="list-item-content">
+                    <div class="list-item-label">{{ station.name }}</div>
+                    <div class="list-item-note">
+                        {% if station.printer_name %}{% icon "print-outline" css_class="text-xs" %} {{ station.printer_name }} &middot; {% endif %}
+                        {{ station.pending_count }} {% trans "pending items" %}
+                    </div>
+                </div>
+                <div class="list-item-end">
+                    {% if not station.is_active %}
+                    <span class="badge ">{% trans "Inactive" %}</span>
+                    {% else %}
+                    {% icon "chevron-forward-outline" css_class="text-muted" %}
+                    {% endif %}
+                </div>
+            </a>
+            {% empty %}
+            <div class="p-8 text-center">
+                {% icon "restaurant-outline" css_class="text-4xl text-muted mb-2" %}
+                <p class="text-muted mb-3">{% trans "No kitchen stations configured" %}</p>
+                <a hx-get="{% url 'orders:station_add' %}"
+                   hx-target="#main-content-area"
+                   hx-push-url="true"
+                   class="btn color-primary">
+                    {% icon "add-outline" %} {% trans "Add Station" %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
