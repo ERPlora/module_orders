@@ -47,7 +47,7 @@
                 <p class="text-sm text-warning italic">{% icon "alert-circle-outline" css_class="text-xs" %} {{ item.notes }}</p>
                 {% endif %}
             </div>
-            <div class="card__footer">
+            <div class="card-footer">
                 <button type="button" class="btn btn-block color-success"
                         hx-post="{% url 'orders:api_bump_item' item.id %}"
                         hx-swap="none"
