@@ -365,7 +365,7 @@ def modify_item_quantity(request, item_id):
         data = json.loads(request.body)
         quantity = max(1, int(data.get('quantity', 1)))
     except (json.JSONDecodeError, ValueError):
-        return JsonResponse({'error': 'Invalid data'}, status=400)
+        return JsonResponse({'error': _('Invalid data')}, status=400)
 
     item.quantity = quantity
     item.save()
@@ -541,7 +541,7 @@ def assign_product_station(request):
         product_id = data.get('product_id')
         station_id = data.get('station_id')
         if not product_id or not station_id:
-            return JsonResponse({'error': 'product_id and station_id required'}, status=400)
+            return JsonResponse({'error': _('product_id and station_id required')}, status=400)
 
         station = get_object_or_404(KitchenStation, pk=station_id, hub_id=hub, is_deleted=False)
         mapping, _ = ProductStation.objects.update_or_create(
@@ -550,7 +550,7 @@ def assign_product_station(request):
         )
         return JsonResponse({'success': True, 'mapping_id': str(mapping.pk)})
     except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
 
 @login_required
@@ -562,7 +562,7 @@ def assign_category_station(request):
         category_id = data.get('category_id')
         station_id = data.get('station_id')
         if not category_id or not station_id:
-            return JsonResponse({'error': 'category_id and station_id required'}, status=400)
+            return JsonResponse({'error': _('category_id and station_id required')}, status=400)
 
         station = get_object_or_404(KitchenStation, pk=station_id, hub_id=hub, is_deleted=False)
         mapping, _ = CategoryStation.objects.update_or_create(
@@ -571,7 +571,7 @@ def assign_category_station(request):
         )
         return JsonResponse({'success': True, 'mapping_id': str(mapping.pk)})
     except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
 
 @login_required
@@ -655,11 +655,11 @@ def api_create_order(request):
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
     items_data = data.get('items', [])
     if not items_data:
-        return JsonResponse({'error': 'At least one item is required'}, status=400)
+        return JsonResponse({'error': _('At least one item is required')}, status=400)
 
     with transaction.atomic():
         order = Order.objects.create(
@@ -907,7 +907,7 @@ def settings_save(request):
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
     config = OrdersSettings.get_settings(hub)
     fields = [
