@@ -45,6 +45,7 @@ PERMISSIONS = [
     ("view_history", _("Can view order history")),
     ("view_settings", _("Can view settings")),
     ("change_settings", _("Can change settings")),
+    ("manage_settings", _("Can manage orders settings")),
 ]
 
 ROLE_PERMISSIONS = {

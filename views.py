@@ -16,7 +16,7 @@ from django.db import transaction
 from django.db.models import Q, Sum, Count, F, ExpressionWrapper, DurationField
 
 from apps.core.htmx import htmx_view
-from apps.accounts.decorators import login_required
+from apps.accounts.decorators import login_required, permission_required
 from apps.modules_runtime.navigation import with_module_nav
 
 from .models import (
@@ -876,6 +876,7 @@ def api_order_stats(request):
 # =============================================================================
 
 @login_required
+@permission_required('orders.manage_settings')
 @with_module_nav('orders', 'settings')
 @htmx_view('orders/pages/settings.html', 'orders/partials/settings.html')
 def settings(request):
@@ -901,6 +902,7 @@ def settings(request):
 
 
 @login_required
+@permission_required('orders.manage_settings')
 @require_POST
 def settings_save(request):
     hub = _hub_id(request)
@@ -923,6 +925,7 @@ def settings_save(request):
 
 
 @login_required
+@permission_required('orders.manage_settings')
 @require_POST
 def settings_toggle(request):
     hub = _hub_id(request)
