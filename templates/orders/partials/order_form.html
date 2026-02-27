@@ -1,15 +1,7 @@
 {% load djicons i18n djicons djicons %}
+<div data-back-url="{% if is_new %}{% url 'orders:active_orders' %}{% else %}{% url 'orders:detail' order.id %}{% endif %}" hidden></div>
 
 <div class="p-4">
-    <button type="button"
-            hx-get="{% if is_new %}{% url 'orders:active_orders' %}{% else %}{% url 'orders:detail' order.id %}{% endif %}"
-            hx-target="#main-content-area"
-            hx-push-url="true"
-            class="btn btn-ghost mb-3">
-        {% icon "arrow-back-outline" %}
-        {% if is_new %}{% trans "Back to Orders" %}{% else %}{% trans "Back to Order" %}{% endif %}
-    </button>
-
     <form method="post"
           hx-post=""
           hx-target="#main-content-area">

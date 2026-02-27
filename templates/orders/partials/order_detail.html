@@ -1,16 +1,7 @@
 {% load djicons i18n djicons djicons %}
+<div data-back-url="{% url 'orders:active_orders' %}" hidden></div>
 
-<!-- Back + Header -->
 <div class="p-4">
-    <button type="button"
-            hx-get="{% url 'orders:active_orders' %}"
-            hx-target="#main-content-area"
-            hx-push-url="true"
-            class="btn btn-ghost mb-3">
-        {% icon "arrow-back-outline" %}
-        {% trans "Back to Orders" %}
-    </button>
-
     <div class="card mb-4">
         <div class="card-header">
             <div class="flex items-center justify-between">
