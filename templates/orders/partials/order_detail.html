@@ -227,13 +227,11 @@
 function orderAction(url, action) {
     fetch(url, {
         method: 'POST',
-        headers: {'X-CSRFToken': '{{ csrf_token }}'},
-    }).then(r => r.json()).then(data => {
+        headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => r.json()).then(data => {
         if (data.success) {
             htmx.ajax('GET', '{% url "orders:detail" order.id %}', '#main-content-area');
         }
-    });
-}
+    },
 
 function cancelOrder() {
     if (confirm('{% trans "Cancel this order?" %}')) {
@@ -242,14 +240,12 @@ function cancelOrder() {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'reason=' + encodeURIComponent(reason),
-        }).then(r => r.json()).then(data => {
+                'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'reason=' + encodeURIComponent(reason)}).then(r => r.json()).then(data => {
             if (data.success) {
                 htmx.ajax('GET', '{% url "orders:active_orders" %}', '#main-content-area');
             }
-        });
+        },
     }
 }
 
@@ -257,12 +253,11 @@ function deleteOrder() {
     if (confirm('{% trans "Delete this order permanently?" %}')) {
         fetch('{% url "orders:delete" order.id %}', {
             method: 'POST',
-            headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        }).then(r => r.json()).then(data => {
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => r.json()).then(data => {
             if (data.success) {
                 htmx.ajax('GET', '{% url "orders:active_orders" %}', '#main-content-area');
             }
-        });
+        },
     }
 }
 </script>

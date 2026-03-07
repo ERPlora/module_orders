@@ -85,12 +85,11 @@
         if (confirm('{% trans "Delete this station?" %}')) {
             fetch('{% url "orders:station_delete" station.id %}', {
                 method: 'POST',
-                headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            }).then(r => r.json()).then(data => {
+                headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => r.json()).then(data => {
                 if (data.success) {
                     htmx.ajax('GET', '{% url "orders:stations" %}', '#main-content-area');
                 }
-            });
+            },
         }
     }
     </script>
