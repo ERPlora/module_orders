@@ -696,6 +696,9 @@ def api_create_order(request):
         order.calculate_totals()
         order.save(update_fields=['subtotal', 'total', 'updated_at'])
 
+    from orders.signals import order_created
+    order_created.send(sender=Order, order=order)
+
     return JsonResponse({
         'success': True,
         'order_id': str(order.pk),

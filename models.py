@@ -258,6 +258,7 @@ class Order(HubBaseModel):
 
     def fire(self):
         """Send order to kitchen."""
+        from orders.signals import order_fired
         now = timezone.now()
         self.fired_at = now
         self.status = 'preparing'
@@ -267,26 +268,33 @@ class Order(HubBaseModel):
             status='preparing',
             fired_at=now,
         )
+        order_fired.send(sender=self.__class__, order=self)
         return self
 
     def mark_ready(self):
+        from orders.signals import order_ready
         self.status = 'ready'
         self.ready_at = timezone.now()
         self.save(update_fields=['status', 'ready_at', 'updated_at'])
+        order_ready.send(sender=self.__class__, order=self)
         return self
 
     def mark_served(self):
+        from orders.signals import order_served
         self.status = 'served'
         self.served_at = timezone.now()
         self.save(update_fields=['status', 'served_at', 'updated_at'])
+        order_served.send(sender=self.__class__, order=self)
         return self
 
     def cancel(self, reason=''):
+        from orders.signals import order_cancelled
         self.status = 'cancelled'
         if reason:
             self.notes = f"{self.notes}\nCancelled: {reason}".strip()
         self.save(update_fields=['status', 'notes', 'updated_at'])
         self.items.filter(is_deleted=False).update(status='cancelled')
+        order_cancelled.send(sender=self.__class__, order=self, reason=reason)
         return self
 
     def recall(self):
